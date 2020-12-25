@@ -308,6 +308,7 @@
      * @param {function} cb
      */
     Halfix.prototype["loadStateXHR"] = function (statepath, cb) {
+        var me = this;
         loadFiles([
             statepath + "/state.bin",
             statepath + "/ram",
@@ -519,7 +520,6 @@
             strcpy(strptr, p);
             wrap("drive_emscripten_init")(info_ptr, strptr, dataptr, id);
             gc();
-
             global["drives"][id] = image;
             requests_in_progress = requests_in_progress - 1 | 0;
             if (requests_in_progress === 0) run_wrapper2();
@@ -950,7 +950,7 @@
         var path = readstr(pathstr);
         var data = savestate_files[path];
         if (!data) throw new Error("ENOENT: " + path);
-        var len = data.length;
+        var len = data.length+1;
         var addr = alloc(len);
         _allocs.pop();
         memcpy(addr, data);
